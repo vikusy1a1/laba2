@@ -122,16 +122,23 @@ ListOne* differenceSets(ListOne* set1, ListOne* set2) {
 int main() {
     ListOne* set1 = nullptr;
     ListOne* set2 = nullptr;
+    int value;
+    string line;
+    cout << "Enter values for set1 (separated by spaces, enter 'done' when finished):" << endl;
+    getline(cin, line); 
 
-    // Заполнение первого множества
-    addToTailL1(set1, 1);
-    addToTailL1(set1, 2);
-    addToTailL1(set1, 3);
+    stringstream ss1(line);
+    while (ss1 >> value) {
+        addToTailL1(set1, value);
+    }
 
-    // Заполнение второго множества
-    addToTailL1(set2, 3);
-    addToTailL1(set2, 4);
-    addToTailL1(set2, 5);
+    cout << "Enter values for set2 (separated by spaces, enter 'done' when finished):" << endl;
+    getline(cin, line); 
+
+    stringstream ss2(line);
+    while (ss2 >> value) {
+        addToTailL1(set2, value);
+    }
 
     cout << "Set 1: ";
     printList1(set1);
