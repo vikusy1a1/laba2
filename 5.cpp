@@ -82,27 +82,27 @@ void inorderTraversal(TreeNode* root) {
     }
 }
 
-int main() {
+int main() {         
     TreeNode* root = nullptr;
+    int value;
 
-    // Вставка узлов в дерево
-    root = insertNode(root, 22);
-    root = insertNode(root, 12);
-    root = insertNode(root, 30);
-    root = insertNode(root, 17);
-    root = insertNode(root, 13);
-    root = insertNode(root, 18);
-    root = insertNode(root, 8);
-    root = insertNode(root, 4);
-    root = insertNode(root, 9);
-    
+    // Ввод значений от пользователя
+    cout << "Enter the values to insert into the tree (enter -1 to complete the input):\n";
+    while (true) {
+        cin >> value;
+        if (value == -1) {
+            break;
+        }
+        root = insertNode(root, value);
+    }
 
     cout << "In-order traversal before deletion: ";
     inorderTraversal(root);
     cout << endl;
 
-    int key = 12;
-    root = deleteNode(root, key);
+    cout << "Enter the node you want to delete: ";
+    cin >> value; // считываем значение для удаления
+    root = deleteNode(root, value); // удаляем узел
 
     cout << "In-order traversal after deletion: ";
     inorderTraversal(root);
