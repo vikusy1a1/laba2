@@ -1,5 +1,10 @@
 #include <iostream>
+#include <fstream>
+#include <functional>
+#include <string>
+
 using namespace std;
+
 
 // Определение структуры узла бинарного дерева поиска
 struct TreeNode {
@@ -72,7 +77,7 @@ TreeNode* insertNode(TreeNode* root, int key) {
 void inorderTraversal(TreeNode* root) {
     if (root != nullptr) {
         inorderTraversal(root->left);
-        cout << root->val << " ";
+        cout << root->val << " ";  // также выводим в консоль
         inorderTraversal(root->right);
     }
 }
@@ -81,19 +86,22 @@ int main() {
     TreeNode* root = nullptr;
 
     // Вставка узлов в дерево
-    root = insertNode(root, 50);
+    root = insertNode(root, 22);
+    root = insertNode(root, 12);
     root = insertNode(root, 30);
-    root = insertNode(root, 20);
-    root = insertNode(root, 40);
-    root = insertNode(root, 70);
-    root = insertNode(root, 60);
-    root = insertNode(root, 80);
+    root = insertNode(root, 17);
+    root = insertNode(root, 13);
+    root = insertNode(root, 18);
+    root = insertNode(root, 8);
+    root = insertNode(root, 4);
+    root = insertNode(root, 9);
+    
 
     cout << "In-order traversal before deletion: ";
     inorderTraversal(root);
     cout << endl;
 
-    int key = 50;
+    int key = 12;
     root = deleteNode(root, key);
 
     cout << "In-order traversal after deletion: ";
