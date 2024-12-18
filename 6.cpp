@@ -42,33 +42,83 @@ void insertTable(HashTable* table[], const string& key, const string& value) {
     }
 }
 
+// Получение значения по ключу
+string getValueTable(HashTable* table[], const string& key) {
+    int index = hashFunction(key);
+    HashTable* temp = table[index];
+    
+    while (temp != nullptr) {
+        if (temp->key == key) {
+            return temp->value; // Возвращаем значение, если ключ найден
+        }
+        temp = temp->next;
+    }
+    return "Key not found"; // Если ключ не найден
+}
 
 // Подсчет значений
 void countValues(HashTable* table[], HashTable* valueCountTable[]) {
     for (int i = 0; i < TABLE_SIZE; ++i) {
         HashTable* entry = table[i];
         while (entry != nullptr) {
+            if (entry->key == entry->value) {
+                entry = entry->next;
+                continue;
+            }
+
+            if (getValueTable(valueCountTable, entry->key) == "Key not found") {
+                insertTable(valueCountTable, entry->key, "0");
+            }
+
             string value = entry->value;
             int hash = hashFunction(value);
             HashTable* temp = valueCountTable[hash];
-
             bool found = false;
             while (temp != nullptr) {
                 if (temp->key == value) {
                     temp->value = to_string(stoi(temp->value) + 1);
+
                     found = true;
                     break;
                 }
                 temp = temp->next;
             }
             if (!found) {
-                insertTable(valueCountTable, value, "1"); // Вставляем новое значение
+                insertTable(valueCountTable, value, "1");
             }
             entry = entry->next;
         }
     }
-}
 
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        HashTable* entry = table[i];
+        while (entry != nullptr) {
+            if (entry->key == entry->value) {
+                entry = entry->next;
+                continue;
+            }
+
+            for (int j = 0; j < TABLE_SIZE; j++) {
+                int hash = hashFunction(entry->value);
+                HashTable* temp = valueCountTable[hash];
+
+                HashTable* entry_deep = table[j];
+                if (entry_deep == nullptr) {
+                    continue;
+                }
+
+
+                if (entry_deep->value == entry->key) {
+                    temp->value = to_string(stoi(temp->value) + stoi(getValueTable(valueCountTable, entry->key)));
+                    break;
+                }
+            }
+
+
+            entry = entry->next;
+        }
+    }
+}
 void printValueCounts(HashTable* valueCountTable[]) {
     for (int i = 0; i < TABLE_SIZE; ++i) {
         HashTable* entry = valueCountTable[i];
@@ -95,6 +145,16 @@ int main() {
 
     // Выводим результат
     printValueCounts(valueCountTable);
+      // Clean up memory (Important!)
+    for (int i = 0; i < TABLE_SIZE; ++i) {
+        HashTable* entry = table[i];
+        while (entry) {
+            HashTable* next = entry->next;
+            delete entry;
+            entry = next;
+        }
+    }
+
 
     return 0;
 }
